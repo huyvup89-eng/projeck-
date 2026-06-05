@@ -1,16 +1,42 @@
-1. GIỚI THIỆU ĐỀ TÀI
-Trong thời đại công nghệ hiện nay, điện thoại và các ứng dụng đã trở thành một phần quan trọng trong cuộc sống hàng ngày. Dựa trên dữ liệu sử dụng điện thoại, Machine Learning có thể giúp phân tích và nhận diện hành vi của người dùng.
-Mục tiêu của project là xây dựng một hệ thống AI có khả năng:
-nhận diện hành vi người dùng
-dự đoán hoạt động dựa trên:
-othời gian
-oứng dụng đang sử dụng
-othời lượng sử dụng
-Project sử dụng thuật toán Decision Tree trong Machine Learning để huấn luyện mô hình dự đoán hành vi.
+1. MÔ TẢ BÀI TOÁN
+Giới thiệu
+Trong thời đại số, con người sử dụng rất nhiều ứng dụng khác nhau như học tập, giải trí, nghe nhạc, chơi game và làm việc. Mỗi người thường có những thói quen sử dụng thiết bị điện tử theo các khung giờ cố định trong ngày.
+Mục tiêu của đề tài là xây dựng một mô hình Machine Learning có khả năng nhận diện và dự đoán hành vi của người dùng dựa trên dữ liệu lịch sử sử dụng thiết bị.
+Mục tiêu
+Xây dựng hệ thống có khả năng:
+Nhận biết hoạt động của người dùng theo từng thời điểm.
+Học các quy luật trong thói quen sử dụng ứng dụng.
+Dự đoán hành vi tiếp theo của người dùng.
+Input và Output
+Input
+Giờ sử dụng
+Ứng dụng đang sử dụng
+Thời lượng sử dụng
+Output
+Hành vi của người dùng:
+oHọc tập
+oGiải trí
+oChơi game
+oTập thể dục
+oĂn uống
+oNgủ nghỉ
 
-2. MỤC TIÊU PROJECT
-Project được xây dựng nhằm:
-tìm hiểu cách hoạt động của Machine Learning
-xây dựng mô hình phân loại hành vi
-phân tích dữ liệu người dùng
-đánh giá độ chính xác của mô hình AI
+2. DỮ LIỆU
+Nguồn dữ liệu
+Dữ liệu được xây dựng mô phỏng dựa trên lịch sinh hoạt thực tế của người dùng trong một tuần.
+Các thuộc tính
+Thuộc tính	Ý nghĩa
+hour	Thời gian trong ngày
+app	Ứng dụng đang sử dụng
+duration	Thời lượng sử dụng
+result	Hành vi của người dùng
+Tiền xử lý dữ liệu
+Các giá trị dạng văn bản được chuyển thành dạng số bằng thư viện LabelEncoder của Scikit-Learn.
+Ví dụ:
+Giá trị gốc	Sau mã hóa
+study	0
+youtube	1
+game	2
+Sau khi mã hóa, dữ liệu được chia thành:
+70% dữ liệu huấn luyện
+30% dữ liệu kiểm tra
