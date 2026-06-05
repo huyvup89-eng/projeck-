@@ -1,4 +1,4 @@
-1. MÔ TẢ BÀI TOÁN
+1. MÔ TẢ BÀI TOÁN:
 Giới thiệu
 Trong thời đại số, con người sử dụng rất nhiều ứng dụng khác nhau như học tập, giải trí, nghe nhạc, chơi game và làm việc. Mỗi người thường có những thói quen sử dụng thiết bị điện tử theo các khung giờ cố định trong ngày.
 Mục tiêu của đề tài là xây dựng một mô hình Machine Learning có khả năng nhận diện và dự đoán hành vi của người dùng dựa trên dữ liệu lịch sử sử dụng thiết bị.
@@ -21,7 +21,7 @@ oTập thể dục
 oĂn uống
 oNgủ nghỉ
 
-2. DỮ LIỆU
+2. DỮ LIỆU:
 Nguồn dữ liệu
 Dữ liệu được xây dựng mô phỏng dựa trên lịch sinh hoạt thực tế của người dùng trong một tuần.
 Các thuộc tính
@@ -40,3 +40,40 @@ game	2
 Sau khi mã hóa, dữ liệu được chia thành:
 70% dữ liệu huấn luyện
 30% dữ liệu kiểm tra
+
+3. DEMO HỆ THỐNG:
+Quy trình hoạt động:
+1.Người dùng nhập dữ liệu mới.
+2.Dữ liệu được mã hóa.
+3.Mô hình Machine Learning xử lý.
+4.Hệ thống đưa ra dự đoán hành vi.
+Ví dụ:
+Input:
+Giờ: 20
+Ứng dụng: game
+Thời lượng: 30 phút
+Output:
+Hành vi dự đoán: Chơi game
+Hệ thống cũng hỗ trợ:
+Biểu đồ Accuracy
+Cross Validation
+Feature Importance
+Cây quyết định trực quan
+
+4. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN:
+Kết quả đạt được
+Xây dựng thành công hệ thống nhận diện thói quen người dùng.
+Áp dụng Machine Learning để dự đoán hành vi.
+So sánh được hiệu quả giữa Decision Tree và Random Forest.
+Trực quan hóa được quá trình học của mô hình.
+Hạn chế
+Dữ liệu còn ít và mang tính mô phỏng.
+Chưa sử dụng dữ liệu thực tế từ điện thoại hoặc máy tính.
+Chưa có khả năng học trực tuyến (online learning).
+Hướng phát triển
+Thu thập dữ liệu thực tế từ người dùng.
+Bổ sung các thuộc tính:
+oNgày trong tuần
+oHành vi trước đó
+oVị trí
+Xây dựng ứng dụng dự đoán thói quen theo thời gian thực.
