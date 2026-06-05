@@ -1,218 +1,290 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[codz]
-*$py.class
+# ==================================================
+# MACHINE LEARNING PROJECT
+# NHẬN DIỆN THÓI QUEN NGƯỜI DÙNG
+# ==================================================
 
-# C extensions
-*.so
+# ======================
+# IMPORT THƯ VIỆN
+# ======================
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# PyInstaller
-#   Usually these files are written by a python script from a template
-#   before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+from sklearn import tree
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cover
-.hypothesis/
-.pytest_cache/
-cover/
+# ======================
+# TẠO DỮ LIỆU
+# ======================
 
-# Translations
-*.mo
-*.pot
+raw_data = {
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+    "hour": [
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23
+    ],
 
-# Flask stuff:
-instance/
-.webassets-cache
+    "app": [
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
 
-# Scrapy stuff:
-.scrapy
+        "eat",
+        "sportify",
+        "youtube",
+        "tiktok",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "sportify",
+        "sportify",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep"
+        
+    ],
 
-# Sphinx documentation
-docs/_build/
+    "duration": [
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0
+    ],
 
-# PyBuilder
-.pybuilder/
-target/
+    "result": [
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
 
-# Jupyter Notebook
-.ipynb_checkpoints
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
 
-# IPython
-profile_default/
-ipython_config.py
+        "entertainment",
+        "entertainment",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep"
+        
+    ]
+}
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+# ======================
+# TẠO DATAFRAME
+# ======================
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-# Pipfile.lock
+data = pd.DataFrame(raw_data)
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-# uv.lock
+print("\n========== DATA ==========")
+print(data)
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-# poetry.lock
-# poetry.toml
+# ======================
+# ENCODE DỮ LIỆU
+# ======================
 
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
-# pdm.lock
-# pdm.toml
-.pdm-python
-.pdm-build/
+app_encoder = LabelEncoder()
+result_encoder = LabelEncoder()
 
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-# pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
+data["app"] = app_encoder.fit_transform(data["app"])
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+data["result"] = result_encoder.fit_transform(data["result"])
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+print("\n========== DATA SAU ENCODE ==========")
+print(data)
 
-# Redis
-*.rdb
-*.aof
-*.pid
+# ======================
+# TÁCH INPUT / OUTPUT
+# ======================
 
-# RabbitMQ
-mnesia/
-rabbitmq/
-rabbitmq-data/
+X = data[["hour", "app", "duration"]]
 
-# ActiveMQ
-activemq-data/
+y = data["result"]
 
-# SageMath parsed files
-*.sage.py
+# ======================
+# CHIA DỮ LIỆU
+# ======================
 
-# Environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.3,
+    random_state=42
+)
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# ======================
+# TẠO MODEL AI
+# ======================
 
-# Rope project settings
-.ropeproject
+model = DecisionTreeClassifier(
+    random_state=42
+)
+# ======================
+# TRAIN MODEL
+# ======================
 
-# mkdocs documentation
-/site
+model.fit(X_train, y_train)
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+print("\n========== TRAIN SUCCESS ==========")
 
-# Pyre type checker
-.pyre/
+# ======================
+# DỰ ĐOÁN DỮ LIỆU MỚI
+# ======================
 
-# pytype static type analyzer
-.pytype/
+# app = none
+app_value = app_encoder.transform(["sleep"])[0]
 
-# Cython debug symbols
-cython_debug/
+# dữ liệu mới:
+# hour = 22
+# app = none
+# duration = 0
 
-# PyCharm
-#   JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#   be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#   and can be added to the global gitignore or merged into this file.  For a more nuclear
-#   option (not recommended) you can uncomment the following to ignore the entire idea folder.
-# .idea/
+new_data = [[22, app_value, 0]]
 
-# Abstra
-#   Abstra is an AI-powered process automation framework.
-#   Ignore directories containing user credentials, local state, and settings.
-#   Learn more at https://abstra.io/docs
-.abstra/
+prediction = model.predict(new_data)
 
-# Visual Studio Code
-#   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#   and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#   you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-# Temporary file for partial code execution
-tempCodeRunnerFile.py
+final_result = result_encoder.inverse_transform(prediction)
 
-# Ruff stuff:
-.ruff_cache/
+print("\n========== PREDICTION ==========")
+print("Hành vi dự đoán:")
+print(final_result)
 
-# PyPI configuration file
-.pypirc
+# ======================
+# ĐỘ CHÍNH XÁC
+# ======================
 
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+y_pred = model.predict(X_test)
 
-# Streamlit
-.streamlit/secrets.toml
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\n========== ACCURACY ==========")
+print(f"Accuracy: {accuracy * 100:.2f}%")
+
+# ======================
+# CONFUSION MATRIX
+# ======================
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\n========== CONFUSION MATRIX ==========")
+print(cm)
+
+# ======================
+# CLASSIFICATION REPORT
+# ======================
+
+print("\n========== CLASSIFICATION REPORT ==========")
+
+print(classification_report(y_test, y_pred))
+
+# ======================
+# BIỂU ĐỒ
+# ======================
+
+plt.figure(figsize=(8,5))
+
+plt.bar(data["hour"], data["duration"])
+
+plt.xlabel("Hour")
+plt.ylabel("Duration")
+plt.title("Phone Usage Duration")
+
+plt.show()
+
+# ======================
+# VẼ DECISION TREE
+# ======================
+
+plt.figure(figsize=(12,8))
+
+tree.plot_tree(
+    model,
+    filled=True,
+    feature_names=["hour", "app", "duration"]
+)
+
+plt.title("Decision Tree")
+
+plt.show()
