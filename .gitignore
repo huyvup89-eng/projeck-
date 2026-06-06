@@ -9,10 +9,12 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
@@ -20,7 +22,7 @@ from sklearn.metrics import classification_report
 from sklearn import tree
 
 # ======================
-# TẠO DỮ LIỆU
+# TẠO DỮ LIỆU (200 MẪU)
 # ======================
 
 raw_data = {
@@ -28,10 +30,221 @@ raw_data = {
     "hour": [
        6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
        12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23,
+       # Ngày thứ 2
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23,
+       # Ngày thứ 3
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23,
+       # Ngày thứ 4
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23,
+       # Ngày thứ 5
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
+       17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23,
+       # Ngày thứ 6
+       6 ,7, 7.5 , 8 , 8.5, 9 , 9.5, 10 , 10.5, 11 , 11.5 ,
+       12, 12.5, 13, 13.5 ,14 , 14.5, 15 , 15.5, 16, 16.5,
        17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5 ,22, 22.5,23
     ],
 
     "app": [
+        # Ngày 1
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "sportify",
+        "youtube",
+        "tiktok",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "sportify",
+        "sportify",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 2 (biến thể)
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "youtube",
+        "youtube",
+        "youtube",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "sportify",
+        "youtube",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 3
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "tiktok",
+        "youtube",
+        "sportify",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "game",
+        "game",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 4
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "sportify",
+        "youtube",
+        "youtube",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "sportify",
+        "sportify",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 5
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "youtube",
+        "tiktok",
+        "youtube",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+        
+        "game",
+        "sportify",
+        "eat",
+        "game",
+        "game",
+        "game",
+        "homework",
+        "homework",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 6
         "sleep",
         "study",
         "study",
@@ -68,10 +281,10 @@ raw_data = {
         "sleep",
         "sleep",
         "sleep"
-        
     ],
 
     "duration": [
+        # Ngày 1
         0,
         60,
         30,
@@ -97,6 +310,195 @@ raw_data = {
         30,
         30,
         
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0,
+        
+        # Ngày 2
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        45,
+        45,
+        45,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0,
+        
+        # Ngày 3
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0,
+        
+        # Ngày 4
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0,
+        
+        # Ngày 5
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        0,
+        0,
+        0,
+        
+        # Ngày 6
+        0,
+        60,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
         
         30,
         30,
@@ -112,6 +514,197 @@ raw_data = {
     ],
 
     "result": [
+        # Ngày 1
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+
+        "entertainment",
+        "entertainment",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 2
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+
+        "entertainment",
+        "entertainment",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 3
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+
+        "gaming",
+        "gaming",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 4
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+
+        "entertainment",
+        "entertainment",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 5
+        "sleep",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+
+        "eat",
+        "entertainment",
+        "entertainment",
+        "entertainment",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "study",
+        "exercise",
+        "exercise",
+
+        "gaming",
+        "entertainment",
+        "eat",
+        "gaming",
+        "gaming",
+        "gaming",
+        "study",
+        "study",
+        "sleep",
+        "sleep",
+        "sleep",
+        
+        # Ngày 6
         "sleep",
         "study",
         "study",
@@ -148,7 +741,6 @@ raw_data = {
         "sleep",
         "sleep",
         "sleep"
-        
     ]
 }
 
@@ -159,7 +751,9 @@ raw_data = {
 data = pd.DataFrame(raw_data)
 
 print("\n========== DATA ==========")
-print(data)
+print(data.head(20))
+print(f"...")
+print(f"Tổng mẫu dữ liệu: {len(data)}")
 
 # ======================
 # ENCODE DỮ LIỆU
@@ -173,7 +767,8 @@ data["app"] = app_encoder.fit_transform(data["app"])
 data["result"] = result_encoder.fit_transform(data["result"])
 
 print("\n========== DATA SAU ENCODE ==========")
-print(data)
+print(data.head(20))
+print(f"...")
 
 # ======================
 # TÁCH INPUT / OUTPUT
@@ -194,53 +789,168 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
+print(f"\nTập huấn luyện: {len(X_train)} mẫu")
+print(f"Tập kiểm tra: {len(X_test)} mẫu")
+
 # ======================
-# TẠO MODEL AI
+# PHƯƠNG PHÁP 1: DECISION TREE (GIẢM OVERFITTING)
 # ======================
 
-model = DecisionTreeClassifier(
+print("\n" + "="*70)
+print("PHƯƠNG PHÁP 1: DECISION TREE (REGULARIZATION MẠNH)")
+print("="*70)
+
+model_dt = DecisionTreeClassifier(
+    max_depth=2,              #  GIẢM TỪ 5 → 2 (GIẢM OVERFITTING)
+    min_samples_split=20,     #  TĂNG TỪ 10 → 20
+    min_samples_leaf=10,      #  TĂNG TỪ 3 → 10
     random_state=42
 )
+
+model_dt.fit(X_train, y_train)
+
+print("\n========== TRAIN SUCCESS - DECISION TREE ==========")
+
+# Dự đoán
+y_pred_dt_train = model_dt.predict(X_train)
+y_pred_dt_test = model_dt.predict(X_test)
+
+# Tính độ chính xác
+acc_dt_train = accuracy_score(y_train, y_pred_dt_train)
+acc_dt_test = accuracy_score(y_test, y_pred_dt_test)
+
+print(f"Độ chính xác huấn luyện: {acc_dt_train * 100:.2f}%")
+print(f"Độ chính xác kiểm tra: {acc_dt_test * 100:.2f}%")
+print(f"Chênh lệch: {(acc_dt_train - acc_dt_test) * 100:.2f}%")
+
+# Cross-Validation
+cv_scores_dt = cross_val_score(model_dt, X, y, cv=5)
+print(f"Cross-Validation (5-Fold): {cv_scores_dt.mean() * 100:.2f}% (±{cv_scores_dt.std() * 100:.2f}%)")
+
+if (acc_dt_train - acc_dt_test) < 0.15:
+    print(" Cân bằng tốt - Không overfitting!")
+else:
+    print("  Vẫn còn dấu hiệu overfitting")
+
 # ======================
-# TRAIN MODEL
+# PHƯƠNG PHÁP 2: RANDOM FOREST (REGULARIZATION MẠNH)
 # ======================
 
-model.fit(X_train, y_train)
+print("\n" + "="*70)
+print("PHƯƠNG PHÁP 2: RANDOM FOREST (REGULARIZATION MẠNH)")
+print("="*70)
 
-print("\n========== TRAIN SUCCESS ==========")
+model_rf = RandomForestClassifier(
+    n_estimators=20,          # 20 cây quyết định
+    max_depth=2,              #  GIẢM TỪ 5 → 2
+    min_samples_split=20,     #  TĂNG TỪ 5 → 20
+    min_samples_leaf=10,      #  TĂNG TỪ 2 → 10
+    random_state=42
+)
+
+model_rf.fit(X_train, y_train)
+
+print("\n========== TRAIN SUCCESS - RANDOM FOREST ==========")
+
+# Dự đoán
+y_pred_rf_train = model_rf.predict(X_train)
+y_pred_rf_test = model_rf.predict(X_test)
+
+# Tính độ chính xác
+acc_rf_train = accuracy_score(y_train, y_pred_rf_train)
+acc_rf_test = accuracy_score(y_test, y_pred_rf_test)
+
+print(f"Độ chính xác huấn luyện: {acc_rf_train * 100:.2f}%")
+print(f"Độ chính xác kiểm tra: {acc_rf_test * 100:.2f}%")
+print(f"Chênh lệch: {(acc_rf_train - acc_rf_test) * 100:.2f}%")
+
+# Cross-Validation
+cv_scores_rf = cross_val_score(model_rf, X, y, cv=5)
+print(f"Cross-Validation (5-Fold): {cv_scores_rf.mean() * 100:.2f}% (±{cv_scores_rf.std() * 100:.2f}%)")
+
+if (acc_rf_train - acc_rf_test) < 0.15:
+    print(" Cân bằng tốt - Không overfitting!")
+else:
+    print("  Vẫn còn dấu hiệu overfitting")
+
+# ======================
+# SO SÁNH HAI PHƯƠNG PHÁP
+# ======================
+
+print("\n" + "="*70)
+print("SO SÁNH CÁC PHƯƠNG PHÁP (SAU KHI REGULARIZE)")
+print("="*70)
+
+print(f"\n{'Phương pháp':<20} {'Train':<12} {'Test':<12} {'Chênh lệch':<15} {'CV (5-Fold)':<12}")
+print("-" * 75)
+print(f"{'Decision Tree':<20} {acc_dt_train*100:>10.2f}% {acc_dt_test*100:>10.2f}% {(acc_dt_train-acc_dt_test)*100:>13.2f}% {cv_scores_dt.mean()*100:>10.2f}%")
+print(f"{'Random Forest':<20} {acc_rf_train*100:>10.2f}% {acc_rf_test*100:>10.2f}% {(acc_rf_train-acc_rf_test)*100:>13.2f}% {cv_scores_rf.mean()*100:>10.2f}%")
+
+# Chọn mô hình tốt nhất
+if (acc_rf_train - acc_rf_test) < (acc_dt_train - acc_dt_test):
+    print("\n KHUYẾN NGHỊ: Sử dụng Random Forest (cân bằng tốt hơn)")
+    model = model_rf
+    best_method = "Random Forest"
+    y_pred = y_pred_rf_test
+    best_acc = acc_rf_test
+else:
+    print("\n KHUYẾN NGHỊ: Sử dụng Decision Tree")
+    model = model_dt
+    best_method = "Decision Tree"
+    y_pred = y_pred_dt_test
+    best_acc = acc_dt_test
 
 # ======================
 # DỰ ĐOÁN DỮ LIỆU MỚI
 # ======================
 
-# app = none
+print("\n" + "="*70)
+print("DỰ ĐOÁN DỮ LIỆU MỚI")
+print("="*70)
+
+# app = sleep
 app_value = app_encoder.transform(["sleep"])[0]
 
 # dữ liệu mới:
 # hour = 22
-# app = none
+# app = sleep
 # duration = 0
 
 new_data = [[22, app_value, 0]]
 
-prediction = model.predict(new_data)
+prediction_dt = model_dt.predict(new_data)
+prediction_rf = model_rf.predict(new_data)
 
-final_result = result_encoder.inverse_transform(prediction)
+final_result_dt = result_encoder.inverse_transform(prediction_dt)
+final_result_rf = result_encoder.inverse_transform(prediction_rf)
 
-print("\n========== PREDICTION ==========")
+print(f"\nLúc 22h, ứng dụng: sleep, thời lượng: 0 phút")
+print(f"Decision Tree dự đoán: {final_result_dt[0]}")
+print(f"Random Forest dự đoán: {final_result_rf[0]}")
+print(f"\n========== PREDICTION ({best_method}) ==========")
 print("Hành vi dự đoán:")
-print(final_result)
+if best_method == "Random Forest":
+    print(final_result_rf[0])
+else:
+    print(final_result_dt[0])
 
 # ======================
 # ĐỘ CHÍNH XÁC
 # ======================
 
-y_pred = model.predict(X_test)
-
 accuracy = accuracy_score(y_test, y_pred)
 
-print("\n========== ACCURACY ==========")
+print("\n" + "="*70)
+print(f"ĐỘ CHÍNH XÁC CUỐI CÙNG ({best_method})")
+print("="*70)
 print(f"Accuracy: {accuracy * 100:.2f}%")
+
+if accuracy >= 0.85:
+    print(" ĐỦ TỐT - Cân bằng giữa accuracy và generalization")
+elif accuracy >= 0.80:
+    print("TỐT - Model khái quát hóa tốt")
+else:
+    print("  CÓ THỂ TĂNG THÊM ")
 
 # ======================
 # CONFUSION MATRIX
@@ -260,31 +970,147 @@ print("\n========== CLASSIFICATION REPORT ==========")
 print(classification_report(y_test, y_pred))
 
 # ======================
-# BIỂU ĐỒ
+# BIỂU ĐỒ 1: SO SÁNH ĐỘ CHÍNH XÁC
 # ======================
 
-plt.figure(figsize=(8,5))
+plt.figure(figsize=(15, 5))
 
-plt.bar(data["hour"], data["duration"])
+# Biểu đồ 1: Train vs Test
+plt.subplot(1, 3, 1)
+phương_pháp = ['Decision Tree\n(max_depth=2)', 'Random Forest\n(max_depth=2)']
+train_scores = [acc_dt_train * 100, acc_rf_train * 100]
+test_scores = [acc_dt_test * 100, acc_rf_test * 100]
 
-plt.xlabel("Hour")
-plt.ylabel("Duration")
-plt.title("Phone Usage Duration")
+x = np.arange(len(phương_pháp))
+width = 0.35
 
+bars1 = plt.bar(x - width/2, train_scores, width, label='Huấn luyện', color='skyblue')
+bars2 = plt.bar(x + width/2, test_scores, width, label='Kiểm tra', color='orange')
+
+# Thêm giá trị trên các bar
+for bar in bars1:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height,
+            f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
+
+for bar in bars2:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height,
+            f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
+
+plt.ylabel('Độ chính xác (%)')
+plt.title('So sánh độ chính xác (Train vs Test)\nSau Regularization')
+plt.xticks(x, phương_pháp, fontsize=9)
+plt.legend()
+plt.ylim([0, 110])
+plt.grid(True, alpha=0.3, axis='y')
+
+# Biểu đồ 2: Cross-Validation
+plt.subplot(1, 3, 2)
+box = plt.boxplot([cv_scores_dt * 100, cv_scores_rf * 100], labels=['Decision Tree', 'Random Forest'], patch_artist=True)
+for patch, color in zip(box['boxes'], ['skyblue', 'orange']):
+    patch.set_facecolor(color)
+plt.ylabel('Độ chính xác (%)')
+plt.title('Cross-Validation Scores\n(5-Fold)')
+plt.grid(True, alpha=0.3, axis='y')
+
+# Biểu đồ 3: Chênh lệch Overfitting
+plt.subplot(1, 3, 3)
+models = ['Decision Tree', 'Random Forest']
+differences = [(acc_dt_train - acc_dt_test) * 100, (acc_rf_train - acc_rf_test) * 100]
+colors = ['red' if d > 15 else 'orange' if d > 10 else 'green' for d in differences]
+
+bars = plt.bar(models, differences, color=colors, alpha=0.7)
+plt.ylabel('Chênh lệch Train-Test (%)')
+plt.title('Mức độ Overfitting\n(Thấp = Tốt)')
+plt.axhline(y=15, color='red', linestyle='--', alpha=0.5, label='Ngưỡng cảnh báo (15%)')
+plt.axhline(y=10, color='orange', linestyle='--', alpha=0.5, label='Ngưỡng cảnh báo (10%)')
+plt.legend(fontsize=8)
+plt.grid(True, alpha=0.3, axis='y')
+
+# Thêm giá trị trên bar
+for bar, diff in zip(bars, differences):
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height,
+            f'{diff:.1f}%', ha='center', va='bottom', fontsize=9)
+
+plt.tight_layout()
 plt.show()
 
 # ======================
-# VẼ DECISION TREE
+# BIỂU ĐỒ 2: DECISION TREE
 # ======================
 
-plt.figure(figsize=(12,8))
+plt.figure(figsize=(14, 8))
 
 tree.plot_tree(
-    model,
+    model_dt,
     filled=True,
-    feature_names=["hour", "app", "duration"]
+    feature_names=["hour", "app", "duration"],
+    class_names=result_encoder.classes_
 )
 
-plt.title("Decision Tree")
+plt.title("Decision Tree (Max Depth = 2)\n Cây đơn giản - Ít Overfitting")
 
 plt.show()
+
+# ======================
+# BIỂU ĐỒ 3: RANDOM FOREST - CÂY ĐẦU TIÊN
+# ======================
+
+plt.figure(figsize=(14, 8))
+
+tree.plot_tree(
+    model_rf.estimators_[0],
+    filled=True,
+    feature_names=["hour", "app", "duration"],
+    class_names=result_encoder.classes_
+)
+
+plt.title("Random Forest - Cây thứ nhất (trong 20 cây)\n Max Depth = 2 - Ít Overfitting")
+
+plt.show()
+
+# ======================
+# TẦM QUAN TRỌNG CÁC BIẾN
+# ======================
+
+print("\n" + "="*70)
+print("TẦM QUAN TRỌNG CÁC BIẾN (RANDOM FOREST)")
+print("="*70)
+
+tầm_quan_trọng = model_rf.feature_importances_
+tên_biến = ["hour", "app", "duration"]
+
+for biến, quan_trọng in zip(tên_biến, tầm_quan_trọng):
+    print(f"{biến:<20} {quan_trọng*100:>6.2f}%")
+
+plt.figure(figsize=(8, 5))
+bars = plt.barh(tên_biến, tầm_quan_trọng * 100, color='steelblue')
+
+# Thêm giá trị trên các bar
+for i, bar in enumerate(bars):
+    width = bar.get_width()
+    plt.text(width, bar.get_y() + bar.get_height()/2.,
+            f'{width:.2f}%', ha='left', va='center', fontsize=10)
+
+plt.xlabel('Feature Importance (%)')
+plt.title('Feature Importance - Random Forest')
+plt.grid(True, alpha=0.3, axis='x')
+plt.show()
+
+# ======================
+# KẾT LUẬN
+# ======================
+
+print("\n" + "="*70)
+print("✅ HOÀN THÀNH PHÂN TÍCH!")
+print("="*70)
+print(f"\n THỐNG KÊ CUỐI CÙNG:")
+print(f"   • Tổng mẫu dữ liệu: {len(data)}")
+print(f"   • Tập huấn luyện: {len(X_train)} mẫu")
+print(f"   • Tập kiểm tra: {len(X_test)} mẫu")
+print(f"   • Mô hình tốt nhất: {best_method}")
+print(f"   • Độ chính xác: {accuracy * 100:.2f}%")
+print(f"   • Chênh lệch Train-Test: {(acc_dt_train - acc_dt_test) * 100 if best_method == 'Decision Tree' else (acc_rf_train - acc_rf_test) * 100:.2f}%")
+
