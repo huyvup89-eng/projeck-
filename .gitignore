@@ -1,5 +1,4 @@
 # ==================================================
-# MACHINE LEARNING PROJECT
 # NHẬN DIỆN THÓI QUEN NGƯỜI DÙNG
 # ==================================================
 
@@ -22,7 +21,7 @@ from sklearn.metrics import classification_report
 from sklearn import tree
 
 # ======================
-# TẠO DỮ LIỆU (200 MẪU)
+# TẠO DỮ LIỆU (204 MẪU)
 # ======================
 
 raw_data = {
